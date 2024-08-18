@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Compliance Report</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #ffffff;
+            color: #333;
+            padding: 1rem 2rem;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        /* Navigation Styles */
+        nav {
+            margin-top: 0;
+        }
+
+        nav a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            margin-left: 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #e9f2ff;
+        }
+
+        /* Language Selector Styles */
+        #language-selector {
+            margin: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #language-selector label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        #language-selector select {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        /* Section Styles */
+        .report-section, .regulations-section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h3 {
+            color: #333;
+        }
+
+        /* List Styles */
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        /* Print Button Styles */
+        .print-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .print-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                margin-top: 1rem;
+                display: flex;
+                flex-direction: column;
+            }
+
+            nav a {
+                margin-left: 0;
+                margin-bottom: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            #language-selector {
+                margin: 10px;
+                padding: 5px;
+            }
+
+            .report-section, .regulations-section {
+                margin: 10px;
+                padding: 10px;
+            }
+
+            .print-button {
+                width: 150px;
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tax Calculation</h1>
+        <nav>
+            <a href="index.html">AsanBI</a>
+        </nav>
+    </header>
+
+    <!-- Language Selector -->
+    <div id="language-selector">
+        <label for="language">Choose Language: </label>
+        <select id="language" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="ru">Russian</option>
+            <option value="az">Azerbaijani</option>
+        </select>
+    </div>
+
+    <!-- Tax Compliance Report Section -->
+    <div class="report-section" id="tax-report">
+        <h2></h2>
+        <p><span id="total-sales-label"></span>: <span id="total-sales">5000</span></p>
+        <p><span id="total-purchases-label"></span>: <span id="total-purchases">3000</span></p>
+        <p><span id="net-income-label"></span>: <span id="net-income">2000</span></p>
+        <p><span id="tax-due-label"></span>: <span id="tax-due">360</span></p>
+    </div>
+
+    <!-- Regulations Section -->
+    <div class="regulations-section">
+        <h3></h3>
+        <ul id="regulations-list"></ul>
+    </div>
+
+    <!-- Print Report Button -->
+    <button class="print-button" onclick="window.print()"></button>
+
+    <!-- Language JSON Data -->
+    <script>
+        const languages = {
+            en: {
+                "title": "Tax Compliance Report",
+                "total_sales": "Total Sales",
+                "total_purchases": "Total Purchases",
+                "net_income": "Net Income",
+                "tax_due": "Tax Due",
+                "regulations": "Azerbaijani Tax Compliance Regulations",
+                "print_report": "Print Report",
+                "regulation_list": [
+                    "Corporate income tax is levied at a rate of 20% on taxable profits.",
+                    "Value Added Tax (VAT) is set at a standard rate of 18%, applicable to most goods and services.",
+                    "Personal income tax rates for residents are progressive, ranging from 14% to 25% based on income brackets.",
+                    "Social security contributions are mandatory for employees and employers, with rates varying based on income levels.",
+                    "Withholding taxes apply on certain types of income, such as dividends, interest, and royalties, at rates ranging from 10% to 15%.",
+                    "Special economic zones and free trade zones may offer reduced tax rates and exemptions to businesses operating within these zones.",
+                    "Late payment of taxes incurs penalties, calculated based on the duration and amount of the delay.",
+                    "Tax compliance requires timely submission of tax returns and payment of taxes due, typically on a quarterly or annual basis depending on the type of tax."
+                ]
+            },
+            ru: {
+                "title": "Отчет о налоговом соответствии",
+                "total_sales": "Общая выручка",
+                "total_purchases": "Общие покупки",
+                "net_income": "Чистый доход",
+                "tax_due": "Налог к оплате",
+                "regulations": "Правила налогового соответствия Азербайджана",
+                "print_report": "Распечатать отчет",
+                "regulation_list": [
+                    "Налог на прибыль корпораций взимается по ставке 20% с налогооблагаемой прибыли.",
+                    "Налог на добавленную стоимость (НДС) установлен по стандартной ставке 18%, применимой к большинству товаров и услуг.",
+                    "Ставки подоходного налога для резидентов прогрессивные, варьируются от 14% до 25% в зависимости от уровней дохода.",
+                    "Социальные взносы обязательны как для сотрудников, так и для работодателей, ставки варьируются в зависимости от уровней дохода.",
+                    "Налоги на удержание применяются к определенным видам доходов, таким как дивиденды, проценты и роялти, ставки варьируются от 10% до 15%.",
+                    "Специальные экономические зоны и зоны свободной торговли могут предлагать сниженные налоговые ставки и освобождения для бизнеса.",
+                    "Просрочка уплаты налогов влечет за собой штрафы, рассчитываемые в зависимости от продолжительности и суммы задержки.",
+                    "Налоговое соответствие требует своевременной подачи налоговых деклараций и уплаты причитающихся налогов, как правило, на ежеквартальной или ежегодной основе."
+                ]
+            },
+            az: {
+                "title": "Vergi Uyğunluğu Hesabatı",
+                "total_sales": "Ümumi Satışlar",
+                "total_purchases": "Ümumi Alışlar",
+                "net_income": "Xalis Gəlir",
+                "tax_due": "Ödəniləcək Vergi",
+                "regulations": "Azərbaycan Vergi Uyğunluğu Qaydaları",
+                "print_report": "Hesabatı Çap Edin",
+                "regulation_list": [
+                    "Korporativ mənfəət vergisi vergi tutulan mənfəətə 20% dərəcə ilə tətbiq edilir.",
+                    "Əlavə Dəyər Vergisi (ƏDV) standart dərəcə ilə 18% olaraq müəyyən edilir, bu dərəcə əksər mallar və xidmətlər üçün tətbiq edilir.",
+                    "Rezidentlər üçün şəxsi gəlir vergisi dərəcələri, gəlir səviyyələrinə əsasən, 14%-dən 25%-ə qədərdir.",
+                    "Sosial təminat ödənişləri işçilər və işəgötürənlər üçün məcburidir, ödəniş dərəcələri gəlir səviyyələrinə əsasən dəyişir.",
+                    "Dividendlər, faizlər və royaltilər kimi gəlirlər üzrə tutulan vergilər, dərəcələri 10%-dən 15%-ə qədər dəyişir.",
+                    "Xüsusi iqtisadi zonalar və sərbəst ticarət zonaları bu zonalarda fəaliyyət göstərən müəssisələr üçün azaldılmış vergi dərəcələri və azadolmalar təklif edə bilər.",
+                    "Vergilərin gec ödənilməsi cəza tətbiq edilir, cəza gecikmənin müddəti və məbləğinə əsasən hesablanır.",
+                    "Vergi uyğunluğu vergi bəyannamələrinin vaxtında təqdim edilməsi və ödəniləcək vergilərin vaxtında ödənilməsini tələb edir, bu, verginin növündən asılı olaraq, adətən rüblük və ya illik əsasda olur."
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load the saved language from localStorage or default to English
+            const savedLanguage = localStorage.getItem('language') || 'en';
+            document.getElementById('language').value = savedLanguage;
+            loadLanguage(savedLanguage);
+        });
+
+        function changeLanguage() {
+            const selectedLanguage = document.getElementById('language').value;
+            localStorage.setItem('language', selectedLanguage);
+            loadLanguage(selectedLanguage);
+        }
+
+        function loadLanguage(language) {
+            const data = languages[language];
+
+            document.querySelector('h2').textContent = data.title;
+            document.querySelector('#total-sales-label').textContent = data.total_sales;
+            document.querySelector('#total-purchases-label').textContent = data.total_purchases;
+            document.querySelector('#net-income-label').textContent = data.net_income;
+            document.querySelector('#tax-due-label').textContent = data.tax_due;
+            document.querySelector('h3').textContent = data.regulations;
+            document.querySelector('.print-button').textContent = data.print_report;
+
+            const regulationsList = document.getElementById('regulations-list');
+            regulationsList.innerHTML = '';
+            data.regulation_list.forEach(regulation => {
+                const listItem = document.createElement('li');
+                listItem.textContent = regulation;
+                regulationsList.appendChild(listItem);
+            
+            
+            // Retrieve the totals from localStorage
+            let totalSales = parseFloat(localStorage.getItem('totalSales')) || 0;
+            let totalPurchases = parseFloat(localStorage.getItem('totalPurchases')) || 0;
+
+            // Perform tax calculations
+            let netIncome = totalSales - totalPurchases;
+            let taxRate = 0.18;  // Example tax rate (adjust as per Azerbaijani tax laws)
+            let taxDue = Math.max(netIncome * taxRate, 0);  // Ensure tax due is not negative
+
+            // Display the results on the page
+            document.getElementById('total-sales').textContent = `$${totalSales.toFixed(2)}`;
+            document.getElementById('total-purchases').textContent = `$${totalPurchases.toFixed(2)}`;
+            document.getElementById('net-income').textContent = `$${netIncome.toFixed(2)}`;
+            document.getElementById('tax-due').textContent = `$${taxDue.toFixed(2)}`;
+        
+            
+            });
+        }
+    </script>
+
+</body>
+</html>

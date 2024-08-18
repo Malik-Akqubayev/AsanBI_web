@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipts Visualization</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #b9d8ea; /* Light background */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #ffffff;
+            color: #333;
+            padding: 1rem 2rem;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin-bottom: 0;
+            font-size: 2rem;
+        }
+
+        nav {
+            margin-top: 0;
+        }
+
+        nav a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            margin-left: 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #e9f2ff;
+        }
+
+        /* Main Content Styles */
+        main {
+            flex: 1;
+            padding: 2rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Charts Section */
+        #charts-section {
+            display: flex;
+            justify-content: flex-start; /* Align charts to the left */
+            gap: 20px; /* Space between charts */
+            padding: 0 20px; /* Space from the left and right edges */
+            width: calc(100% - 40px); /* Adjust width to account for padding */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Chart container styling */
+        .chart-container {
+            background-color: white;
+            padding: 20px; /* Adjust padding for better visual balance */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            flex: 1; /* Allow charts to grow and shrink */
+            min-width: 500px; /* Ensure a minimum width for readability */
+        }
+
+        /* Individual chart container adjustments */
+        #pie-chart-container {
+            margin-right: 10px; /* Add space on the right */
+        }
+
+        #bar-chart-container {
+            margin-left: 10px; /* Add space on the left */
+        }
+
+        /* Responsive design */
+        @media (max-width: 900px) {
+            #charts-section {
+                flex-direction: column;
+                align-items: center; /* Center charts on smaller screens */
+                width: 100%; /* Full width on smaller screens */
+                padding: 10px; /* Adjust padding for smaller screens */
+            }
+
+            .chart-container {
+                width: 100%; /* Full width on smaller screens */
+                margin: 10px 0; /* Add space between stacked charts */
+            }
+        }
+        /* Footer */
+        footer {
+            background: #ffffff;
+            color: #333;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Receipts Visualization</h1>
+        <nav>
+            <a href="enterprises.html">Enterprises</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="charts-section">
+            <!-- Pie Chart Container -->
+            <div class="chart-container" id="pie-chart-container">
+                <h2>Bank-wise Distribution</h2>
+                {{ pie_chart_html|safe }}
+            </div>
+
+            <!-- Bar Chart Container -->
+            <div class="chart-container" id="bar-chart-container">
+                <h2>Amount by Description</h2>
+                {{ bar_chart_html|safe }}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AsanBI</p>
+    </footer>
+</body>
+</html>

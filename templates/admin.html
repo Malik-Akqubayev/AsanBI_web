@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsanBI - Admin</title>
+    <link rel="stylesheet" href="/static/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+    <header>
+        <h1>AsanBI - Admin</h1>
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+    <main>
+        <section id="filter-section">
+            <h2>Filter Data</h2>
+            <form id="filter-form">
+                <label for="type">Type:</label>
+                <select id="type" name="type">
+                    <option value="">All</option>
+                    <option value="sale">Sale</option>
+                    <option value="purchase">Purchase</option>
+                </select>
+                <label for="date-range">Date:</label>
+                <input type="text" id="date-range-start" name="date-range-start" placeholder="Start Date">
+                <input type="text" id="date-range-end" name="date-range-end" placeholder="End Date">
+                <label for="amount-min">Amount Between:</label>
+                <input type="number" id="amount-min" name="amount-min" placeholder="Min" step="0.01">
+                <input type="number" id="amount-max" name="amount-max" placeholder="Max" step="0.01">
+                <button type="submit" class="button">Apply Filters</button>
+                <button type="button" id="clear-filters" class="button">Clear Filters</button>
+            </form>
+        </section>
+
+        <section id="data-entries">
+            <h2>Data Entries</h2>
+            <button id="clear-data" class="button">Clear All Data</button>
+            <table id="entries-table">
+                <thead>
+                    <tr>
+                        <th data-sort="entryType">Type</th>
+                        <th data-sort="date">Date</th>
+                        <th data-sort="amount">Amount</th>
+                        <th data-sort="description">Description</th>
+                        <th>Download Receipt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Entries will be populated here by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 AsanBI</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const entriesTableBody = document.querySelector('#entries-table tbody');
+            const filterForm = document.getElementById('filter-form');
+            const clearFiltersButton = document.getElementById('clear-filters');
+            let entries = JSON.parse(localStorage.getItem('entries')) || [];
+
+            // Initialize Flatpickr for date range inputs
+            flatpickr("#date-range-start", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Optional: Prevent selecting future dates
+            });
+
+            flatpickr("#date-range-end", {
+                dateFormat: "Y-m-d",
+                maxDate: "today", // Optional: Prevent selecting future dates
+            });
+
+            // Function to populate table with entries
+            const populateTable = () => {
+                let totalSales = 0;
+                let totalPurchases = 0;
+                entriesTableBody.innerHTML = '';
+                entries.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${entry.entryType}</td>
+                        <td>${new Date(entry.date).toLocaleDateString()}</td>
+                        <td>${entry.amount.toFixed(2)}</td>
+                        <td>${entry.description}</td>
+                        <td><button class="download-receipt button" data-entry='${JSON.stringify(entry)}'>Download Receipt</button></td>
+                    `;
+                    entriesTableBody.appendChild(row);
+                    if (entry.entryType === 'sale') {
+                        totalSales += entry.amount;
+                    } else if (entry.entryType === 'purchase') {
+                        totalPurchases += entry.amount;
+            }
+                });
+
+                // Store totals in localStorage
+                localStorage.setItem('totalSales', totalSales.toFixed(2));
+                localStorage.setItem('totalPurchases', totalPurchases.toFixed(2));
+
+                document.querySelectorAll('.download-receipt').forEach(button => {
+                    button.addEventListener('click', event => {
+                        const entry = JSON.parse(event.target.getAttribute('data-entry'));
+                        generateReceipt(entry);
+                    });
+                });
+            };
+
+            // Populate the table initially
+            populateTable();
+
+            // Clear data functionality
+            document.getElementById('clear-data').addEventListener('click', () => {
+                localStorage.removeItem('entries');
+                entries = [];
+                populateTable();
+            });
+
+            // Filter functionality
+            const filterEntries = (filters) => {
+                let filteredEntries = entries;
+
+                // Apply filters
+                if (filters.type) {
+                    filteredEntries = filteredEntries.filter(entry => entry.entryType === filters.type);
+                }
+
+                if (filters.dateRangeStart || filters.dateRangeEnd) {
+                    const startDate = new Date(filters.dateRangeStart);
+                    const endDate = new Date(filters.dateRangeEnd);
+                    
+                    filteredEntries = filteredEntries.filter(entry => {
+                        const entryDate = new Date(entry.date);
+                        return (!filters.dateRangeStart || entryDate >= startDate) &&
+                               (!filters.dateRangeEnd || entryDate <= endDate);
+                    });
+                }
+
+                if (filters.amountMin || filters.amountMax) {
+                    const minAmount = parseFloat(filters.amountMin) || -Infinity;
+                    const maxAmount = parseFloat(filters.amountMax) || Infinity;
+
+                    filteredEntries = filteredEntries.filter(entry => entry.amount >= minAmount && entry.amount <= maxAmount);
+                }
+
+                return filteredEntries;
+            };
+
+            filterForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(filterForm);
+                const filters = {
+                    type: formData.get('type') || '',
+                    dateRangeStart: formData.get('date-range-start') || '',
+                    dateRangeEnd: formData.get('date-range-end') || '',
+                    amountMin: formData.get('amount-min') || '',
+                    amountMax: formData.get('amount-max') || ''
+                };
+
+                entries = filterEntries(filters);
+                populateTable();
+            });
+
+            clearFiltersButton.addEventListener('click', () => {
+                filterForm.reset();
+                entries = JSON.parse(localStorage.getItem('entries')) || [];
+                populateTable();
+            });
+
+            // Sorting functionality
+            const sortData = (key, direction) => {
+                return entries.slice().sort((a, b) => {
+                    if (key === 'date') {
+                        return direction === 'asc' ? new Date(a[key]) - new Date(b[key]) : new Date(b[key]) - new Date(a[key]);
+                    } else if (key === 'amount') {
+                        return direction === 'asc' ? a[key] - b[key] : b[key] - a[key];
+                    } else {
+                        return direction === 'asc' ? a[key].localeCompare(b[key]) : b[key].localeCompare(a[key]);
+                    }
+                });
+            };
+
+            document.querySelectorAll('#entries-table th[data-sort]').forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortKey = header.getAttribute('data-sort');
+                    const currentDirection = header.getAttribute('data-direction') || 'asc';
+                    const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+
+                    header.setAttribute('data-direction', newDirection);
+
+                    entries = sortData(sortKey, newDirection);
+                    populateTable();
+                });
+            });
+
+            // Function to generate receipt
+            function generateReceipt(entry) {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Add header
+                doc.setFontSize(18);
+                doc.setTextColor(40);
+                doc.text('AsanBI Financial Receipt', 105, 20, { align: 'center' });
+
+                // Add horizontal line below header
+                doc.setLineWidth(0.5);
+                doc.line(20, 25, 190, 25);
+
+                // Add entry details
+                doc.setFontSize(12);
+                doc.setTextColor(60);
+                doc.text(`Receipt for: ${entry.entryType.charAt(0).toUpperCase() + entry.entryType.slice(1)}`, 20, 40);
+                doc.text(`Date: ${new Date(entry.date).toLocaleDateString()}`, 20, 50);
+                doc.text(`Amount: $${entry.amount.toFixed(2)}`, 20, 60);
+                doc.text(`Description:`, 20, 70);
+                doc.text(entry.description, 20, 80, { maxWidth: 170 });
+
+                // Add footer
+                doc.setTextColor(40);
+                doc.setFontSize(10);
+                doc.text('Thank you for using AsanBI services.', 105, 280, { align: 'center' });
+                doc.text('Visit us at: www.asanbi.com', 105, 290, { align: 'center' });
+
+                // Save the PDF
+                doc.save('receipt.pdf');
+            }
+        });
+    </script>
+</body>
+</html>

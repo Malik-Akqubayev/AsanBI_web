@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprises - AsanBI Accounting</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>AsanBI</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="enterprises.html">Enterprises</a>
+            <a href="accounting_services.html">Accounting Services</a>
+            <a href="banks.html">Banks</a>
+            <a href="admin.html">Admin</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="enterprises">
+            <h2>Enterprises Section</h2>
+            <p>Here you can manage enterprise-related accounting processes.</p>
+            <p>
+                <a href="sales_purchases" class="button-link">Go to Sales/Purchases Data Entry</a>
+            </p>
+
+            <!-- Receipts Section -->
+            <p><a href="visualize.html" onclick='True'>Load Receipts</a></p>
+            <p><a href="tax_compliance.html" onclick='True'>Tax Calculations</a></p>
+            <div id="receipts-container">
+                <!-- Receipts will be displayed here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AsanBI</p>
+    </footer>
+
+    <!-- <script>
+        function fetchReceipts() {
+            fetch('/fetch_receipts')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const container = document.getElementById('receipts-container');
+                    container.innerHTML = ''; // Clear previous data
+
+                    if (data.length === 0) {
+                        container.innerHTML = '<p>No receipts found.</p>';
+                    } else {
+                        data.forEach(receipt => {
+                            const receiptDiv = document.createElement('div');
+                            receiptDiv.classList.add('receipt');
+                            receiptDiv.innerHTML = `
+                                <p><strong>Account:</strong> ${receipt.account_number}</p>
+                                <p><strong>Date:</strong> ${receipt.transaction_date}</p>
+                                <p><strong>Amount:</strong> $${receipt.amount.toFixed(2)}</p>
+                                <p><strong>Description:</strong> ${receipt.description}</p>
+                                <hr>
+                            `;
+                            container.appendChild(receiptDiv);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching receipts:', error);
+                });
+        }
+    </script> -->
+</body>
+</html>

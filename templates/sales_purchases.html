@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsanBI - Enterprises</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>AsanBI</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="enterprises.html">Enterprises</a>
+            <a href="accounting_services.html">Accounting Services</a>
+            <a href="banks.html">Banks</a>
+            <a href="admin.html">Admin</a>
+        </nav>
+    </header>
+    <main>
+        <section id="intro">
+            <h2>Enterprises Data Entry</h2>
+            <p>Select a data type and enter the relevant details in the table below. Your data will be stored for later review and displayed in the chart.</p>
+        </section>
+        <section id="data-entry">
+            <form id="data-form">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Data Entry</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><label for="entry-type">Data Type:</label></td>
+                            <td>
+                                <select id="entry-type" name="entry-type">
+                                    <option value="">Select Type</option>
+                                    <option value="sale">Sale</option>
+                                    <option value="purchase">Purchase</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr id="date-row" class="hidden">
+                            <td><label for="date">Date:</label></td>
+                            <td><input type="date" id="date" name="date" required></td>
+                        </tr>
+                        <tr id="amount-row" class="hidden">
+                            <td><label for="amount">Amount:</label></td>
+                            <td><input type="number" id="amount" name="amount" step="0.01" required></td>
+                        </tr>
+                        <tr id="description-row" class="hidden">
+                            <td><label for="description">Description:</label></td>
+                            <td><textarea id="description" name="description" rows="4" required></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="button">Submit Data</button>
+            </form>
+        </section>
+        <section id="charts">
+            <h2>Sales and Purchase Trends</h2>
+            <canvas id="salesChart" width="400" height="200"></canvas>
+            <h2>Cumulative Profit</h2>
+            <canvas id="profitChart" width="400" height="200"></canvas>
+        </section>
+        
+        <section class="profit-summary">
+            <h2>Daily Profit</h2>
+            <ul id="dailyProfitList"></ul>
+            <h2>Total Profit</h2>
+            <p id="totalProfit">Total Profit: $0.00</p>
+        </section>
+        
+               
+        
+    </main>
+    <footer>
+        <p>&copy; 2024 AsanBI</p>
+    </footer>
+    <script src="/static/scripts.js"></script>
+</body>
+</html>
