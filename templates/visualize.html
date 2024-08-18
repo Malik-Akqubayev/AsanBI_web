@@ -73,7 +73,7 @@
             justify-content: flex-start; /* Align charts to the left */
             gap: 20px; /* Space between charts */
             padding: 0 20px; /* Space from the left and right edges */
-            width: calc(100% - 40px); /* Adjust width to account for padding */
+            width: calc(100% - 20px); /* Adjust width to account for padding */
             box-sizing: border-box; /* Include padding in width calculation */
         }
 
@@ -144,13 +144,13 @@
             <!-- Pie Chart Container -->
             <div class="chart-container" id="pie-chart-container">
                 <h2>Bank-wise Distribution</h2>
-                {{ pie_chart_html|safe }}
+                <img src="/static/images/pie-chart.png">
             </div>
 
             <!-- Bar Chart Container -->
             <div class="chart-container" id="bar-chart-container">
                 <h2>Amount by Description</h2>
-                {{ bar_chart_html|safe }}
+                <img src="/static/images/bar-chart.png">
             </div>
         </section>
     </main>

@@ -23,7 +23,7 @@
             <h2>Enterprises Section</h2>
             <p>Here you can manage enterprise-related accounting processes.</p>
             <p>
-                <a href="sales_purchases" class="button-link">Go to Sales/Purchases Data Entry</a>
+                <a href="sales_purchases.html" class="button-link">Go to Sales/Purchases Data Entry</a>
             </p>
 
             <!-- Receipts Section -->
@@ -38,41 +38,5 @@
     <footer>
         <p>&copy; 2024 AsanBI</p>
     </footer>
-
-    <!-- <script>
-        function fetchReceipts() {
-            fetch('/fetch_receipts')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const container = document.getElementById('receipts-container');
-                    container.innerHTML = ''; // Clear previous data
-
-                    if (data.length === 0) {
-                        container.innerHTML = '<p>No receipts found.</p>';
-                    } else {
-                        data.forEach(receipt => {
-                            const receiptDiv = document.createElement('div');
-                            receiptDiv.classList.add('receipt');
-                            receiptDiv.innerHTML = `
-                                <p><strong>Account:</strong> ${receipt.account_number}</p>
-                                <p><strong>Date:</strong> ${receipt.transaction_date}</p>
-                                <p><strong>Amount:</strong> $${receipt.amount.toFixed(2)}</p>
-                                <p><strong>Description:</strong> ${receipt.description}</p>
-                                <hr>
-                            `;
-                            container.appendChild(receiptDiv);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching receipts:', error);
-                });
-        }
-    </script> -->
 </body>
 </html>
